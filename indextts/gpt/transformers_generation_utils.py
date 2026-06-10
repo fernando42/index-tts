@@ -29,16 +29,15 @@ from transformers.cache_utils import (
     Cache,
     DynamicCache,
     EncoderDecoderCache,
-    OffloadedCache,
-    QuantizedCacheConfig,
     StaticCache,
 )
+from indextts.gpt._compat_5x import QuantizedCacheConfig
 from transformers.configuration_utils import PretrainedConfig
 from transformers.integrations.deepspeed import is_deepspeed_zero3_enabled
 from transformers.integrations.fsdp import is_fsdp_managed_module
 from transformers.modeling_outputs import CausalLMOutputWithPast, Seq2SeqLMOutput
-from transformers.pytorch_utils import isin_mps_friendly
-from transformers.tokenization_utils import ExtensionsTrie
+from indextts.gpt._compat_5x import isin_mps_friendly
+from indextts.gpt._compat_5x import ExtensionsTrie
 from transformers.utils import (
     ModelOutput,
     is_accelerate_available,
