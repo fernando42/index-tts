@@ -51,11 +51,11 @@ dependencies = [
   "sentencepiece>=0.2.1",
   "tensorboard==2.9.1",
   "textstat>=0.7.10",
-  "tokenizers==0.21.0",
+  "tokenizers>=0.22.0,<=0.23.0",
   "torch==2.8.*",
   "torchaudio==2.8.*",
   "tqdm>=4.67.1",
-  "transformers>=4.52.1,<6",
+  "transformers>=5.0.0,<6",
 
   # Use "wetext" on Windows/Mac, otherwise "WeTextProcessing" on Linux.
   "wetext>=0.0.9; sys_platform != 'linux'",
@@ -65,7 +65,7 @@ dependencies = [
 [project.optional-dependencies]
 # To install the WebUI support, use `uv sync --extra webui` (or `--all-extras`).
 webui = [
-  "gradio==5.45.0",
+  "gradio>=5.47.2,<6",
 ]
 # To install the DeepSpeed support, use `uv sync --extra deepspeed` (or `--all-extras`).
 deepspeed = [

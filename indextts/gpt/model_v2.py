@@ -10,7 +10,7 @@ from indextts.gpt.transformers_gpt2 import GPT2PreTrainedModel, GPT2Model
 
 # from transformers import GPT2Config, GPT2PreTrainedModel, LogitsProcessorList
 from transformers.modeling_outputs import CausalLMOutputWithCrossAttentions
-from indextts.gpt._compat_5x import assert_device_map, get_device_map
+from indextts.gpt._compat_5x import assert_device_map, get_device_map, reorder_past_key_values
 
 from indextts.gpt.conformer_encoder import ConformerEncoder
 from indextts.gpt.perceiver import PerceiverResampler
@@ -195,6 +195,11 @@ class GPT2InferenceModel(GPT2PreTrainedModel):
             cross_attentions=transformer_outputs.cross_attentions,
         )
 
+    @classmethod
+    def _supports_default_dynamic_cache(cls):
+        # Vendored GPT-2 uses legacy tuple caches, not transformers 5 DynamicCache.
+        return False
+
     @staticmethod
     def _reorder_cache(past, beam_idx):
         """
@@ -202,13 +207,7 @@ class GPT2InferenceModel(GPT2PreTrainedModel):
         :meth:`~transformers.PreTrainedModel.beam_search` or :meth:`~transformers.PreTrainedModel.beam_sample` is
         called. This is required to match :obj:`past_key_values` with the correct beam_idx at every generation step.
         """
-        return tuple(
-            tuple(
-                past_state.index_select(0, beam_idx.to(past_state.device))
-                for past_state in layer_past
-            )
-            for layer_past in past
-        )
+        return reorder_past_key_values(past, beam_idx)
 
 
 class ConditioningEncoder(nn.Module):

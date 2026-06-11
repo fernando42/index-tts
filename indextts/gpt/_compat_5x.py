@@ -291,3 +291,29 @@ except ImportError:
                     results.append(child)
                 else:
                     self._collect(child, results)
+
+
+# ---------------------------------------------------------------------------
+# Beam-search cache reordering (transformers 5.x uses Cache objects)
+# ---------------------------------------------------------------------------
+
+def reorder_past_key_values(past, beam_idx):
+    """Reorder KV cache for beam search (legacy tuple + transformers 5 Cache)."""
+    try:
+        from transformers.cache_utils import Cache
+    except ImportError:
+        Cache = None
+
+    if Cache is not None and isinstance(past, Cache):
+        past.reorder_cache(beam_idx)
+        return past
+
+    return tuple(
+        tuple(
+            past_state.index_select(0, beam_idx.to(past_state.device))
+            if past_state is not None
+            else None
+            for past_state in layer_past
+        )
+        for layer_past in past
+    )
