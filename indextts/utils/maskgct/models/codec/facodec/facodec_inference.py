@@ -16,6 +16,7 @@ from .modules.commons import *
 import time
 
 import torchaudio
+import soundfile as sf
 import librosa
 from collections import OrderedDict
 
@@ -73,10 +74,11 @@ class FAcodecInference(object):
 
         os.makedirs(output_dir, exist_ok=True)
         source_name = source.split("/")[-1].split(".")[0]
-        torchaudio.save(
+        sf.write(
             f"{output_dir}/reconstructed_{source_name}.wav",
-            full_pred_wave[0].cpu(),
+            full_pred_wave[0].cpu().squeeze(0).numpy(),
             self.cfg.preprocess_params.sr,
+            subtype='PCM_16',
         )
 
         print(
@@ -125,10 +127,11 @@ class FAcodecInference(object):
         os.makedirs(output_dir, exist_ok=True)
         source_name = source.split("/")[-1].split(".")[0]
         reference_name = reference.split("/")[-1].split(".")[0]
-        torchaudio.save(
+        sf.write(
             f"{output_dir}/converted_{source_name}_to_{reference_name}.wav",
-            full_pred_wave[0].cpu(),
+            full_pred_wave[0].cpu().squeeze(0).numpy(),
             self.cfg.preprocess_params.sr,
+            subtype='PCM_16',
         )
 
         print(

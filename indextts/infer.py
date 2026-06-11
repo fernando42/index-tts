@@ -7,6 +7,7 @@ from typing import Dict, List
 
 import torch
 import torchaudio
+import soundfile as sf
 from torch.nn.utils.rnn import pad_sequence
 from omegaconf import OmegaConf
 from tqdm import tqdm
@@ -506,7 +507,7 @@ class IndexTTS:
         if output_path:
             # 直接保存音频到指定路径中
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            torchaudio.save(output_path, wav.type(torch.int16), sampling_rate)
+            sf.write(output_path, wav.type(torch.int16).squeeze(0).numpy(), sampling_rate, subtype='PCM_16')
             print(">> wav file saved to:", output_path)
             return output_path
         else:
@@ -673,7 +674,7 @@ class IndexTTS:
                 print(">> remove old wav file:", output_path)
             if os.path.dirname(output_path) != "":
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            torchaudio.save(output_path, wav.type(torch.int16), sampling_rate)
+            sf.write(output_path, wav.type(torch.int16).squeeze(0).numpy(), sampling_rate, subtype='PCM_16')
             print(">> wav file saved to:", output_path)
             return output_path
         else:
