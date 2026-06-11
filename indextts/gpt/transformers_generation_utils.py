@@ -31,7 +31,7 @@ from transformers.cache_utils import (
     EncoderDecoderCache,
     StaticCache,
 )
-from indextts.gpt._compat_5x import QuantizedCacheConfig
+from indextts.gpt._compat_5x import OffloadedCache, QuantizedCacheConfig
 from transformers.configuration_utils import PretrainedConfig
 from transformers.integrations.deepspeed import is_deepspeed_zero3_enabled
 from transformers.integrations.fsdp import is_fsdp_managed_module

@@ -45,7 +45,6 @@ from transformers.dynamic_module_utils import custom_object_save
 from transformers.generation import GenerationConfig
 import transformers
 from transformers.generation.utils import GenerationMixin
-from transformers.generation import GenerationConfig
 
 
 from transformers.integrations import PeftAdapterMixin, deepspeed_config, is_deepspeed_zero3_enabled
